@@ -24,6 +24,7 @@
 #include <basetsd.h>
 #include <guiddef.h>
 
+
 #ifndef RC_INVOKED
 #include <ctype.h>
 #include <stddef.h>
@@ -1026,6 +1027,49 @@ typedef struct _XMM_SAVE_AREA32 {
     M128A XmmRegisters[16];  /* 0a0 */
     BYTE Reserved4[96];      /* 1a0 */
 } XMM_SAVE_AREA32, *PXMM_SAVE_AREA32;
+
+//HACK
+    
+#define XMM_SAVE_AREA32_CONVERSION(xmm_save_area_32, x86_float_state_64) (   \
+    xmm_save_area_32.ControlWord = (WORD)x86_float_state_64.__fpu_fcw    \
+    xmm_save_area_32.StatusWord = (WORD)x86_float_state_64.__fpu_fsw    \
+    xmm_save_area_32.TagWord = x86_float_state_64.__fpu_ftw    \
+    xmm_save_area_32.Reserved1 = x86_float_state_64.__fpu_rsrv1    \
+    xmm_save_area_32.ErrorOpcode = x86_float_state_64.__fpu_fop    \
+    xmm_save_area_32.ErrorOffset = x86_float_state_64.__fpu_ip    \
+    xmm_save_area_32.ErrorSelector = x86_float_state_64.__fpu_cs    \
+    xmm_save_area_32.Reserved2 = x86_float_state_64.__fpu_rsrv2    \
+    xmm_save_area_32.DataOffset = x86_float_state_64.__fpu_dp    \
+    xmm_save_area_32.DataSelector = x86_float_state_64.__fpu_ds    \
+    xmm_save_area_32.Reserved3 = x86_float_state_64.__fpu_rsrv3    \
+    xmm_save_area_32.MxCsr = x86_float_state_64.__fpu_mxcsr    \
+    xmm_save_area_32.MxCsr_Mask = x86_float_state_64.__fpu_mxcsrmask    \
+    xmm_save_area_32.FloatRegisters[0] = (M128A)x86_float_state_64.__fpu_stmm0    \
+    xmm_save_area_32.FloatRegisters[1] = (M128A)x86_float_state_64.__fpu_stmm1    \
+    xmm_save_area_32.FloatRegisters[2] = (M128A)x86_float_state_64.__fpu_stmm2    \
+    xmm_save_area_32.FloatRegisters[3] = (M128A)x86_float_state_64.__fpu_stmm3    \
+    xmm_save_area_32.FloatRegisters[4] = (M128A)x86_float_state_64.__fpu_stmm4    \
+    xmm_save_area_32.FloatRegisters[5] = (M128A)x86_float_state_64.__fpu_stmm5    \
+    xmm_save_area_32.FloatRegisters[6] = (M128A)x86_float_state_64.__fpu_stmm6    \
+    xmm_save_area_32.FloatRegisters[7] = (M128A)x86_float_state_64.__fpu_stmm7    \
+    xmm_save_area_32.XmmRegisters[0] = (M128A)x86_float_state_64.__fpu_xmm0    \
+    xmm_save_area_32.XmmRegisters[1] = (M128A)x86_float_state_64.__fpu_xmm1    \
+    xmm_save_area_32.XmmRegisters[2] = (M128A)x86_float_state_64.__fpu_xmm2    \
+    xmm_save_area_32.XmmRegisters[3] = (M128A)x86_float_state_64.__fpu_xmm3    \
+    xmm_save_area_32.XmmRegisters[4] = (M128A)x86_float_state_64.__fpu_xmm4    \
+    xmm_save_area_32.XmmRegisters[5] = (M128A)x86_float_state_64.__fpu_xmm5    \
+    xmm_save_area_32.XmmRegisters[6] = (M128A)x86_float_state_64.__fpu_xmm6    \
+    xmm_save_area_32.XmmRegisters[7] = (M128A)x86_float_state_64.__fpu_xmm7    \
+    xmm_save_area_32.XmmRegisters[8] = (M128A)x86_float_state_64.__fpu_xmm8    \
+    xmm_save_area_32.XmmRegisters[9] = (M128A)x86_float_state_64.__fpu_xmm9    \
+    xmm_save_area_32.XmmRegisters[10] = (M128A)x86_float_state_64.__fpu_xmm10    \
+    xmm_save_area_32.XmmRegisters[11] = (M128A)x86_float_state_64.__fpu_xmm11    \
+    xmm_save_area_32.XmmRegisters[12] = (M128A)x86_float_state_64.__fpu_xmm12    \
+    xmm_save_area_32.XmmRegisters[13] = (M128A)x86_float_state_64.__fpu_xmm13    \
+    xmm_save_area_32.XmmRegisters[14] = (M128A)x86_float_state_64.__fpu_xmm14    \
+    xmm_save_area_32.XmmRegisters[15] = (M128A)x86_float_state_64.__fpu_xmm15    \
+                                                        )
+//----
 
 typedef struct DECLSPEC_ALIGN(16) _CONTEXT {
     DWORD64 P1Home;          /* 000 */
@@ -2262,8 +2306,9 @@ typedef struct _NT_TIB
 	struct _NT_TIB *Self;
 } NT_TIB, *PNT_TIB;
 
+    
 struct _TEB;
-
+    
 #if defined(__i386__) && defined(__GNUC__) && ((__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 2)))
 static FORCEINLINE struct _TEB * WINAPI NtCurrentTeb(void)
 {
@@ -2279,13 +2324,26 @@ static FORCEINLINE struct _TEB * WINAPI NtCurrentTeb(void)
   __asm mov teb, eax;
   return teb;
 }
-#elif defined(__x86_64__) && defined(__GNUC__)
+//HACK
+#elif defined(__x86_64__) && defined(__GNUC__) && !defined(__APPLE__)
+//---
 static FORCEINLINE struct _TEB * WINAPI NtCurrentTeb(void)
 {
     struct _TEB *teb;
     __asm__(".byte 0x65\n\tmovq (0x30),%0" : "=r" (teb));
     return teb;
 }
+#elif defined(__APPLE__)
+//HACK
+#include <pthread.h>
+    
+static pthread_key_t teb_key;
+
+static FORCEINLINE struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}
+//---
 #else
 extern struct _TEB * WINAPI NtCurrentTeb(void);
 #endif

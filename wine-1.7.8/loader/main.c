@@ -43,16 +43,30 @@
 
 #ifdef __APPLE__
 
+//HACK
+//#ifndef __clang__
+//__asm__(".zerofill WINE_DOS, WINE_DOS, ___wine_dos, 0x40000000");
+//__asm__(".zerofill WINE_SHAREDHEAP, WINE_SHAREDHEAP, ___wine_shared_heap, 0x03000000");
+//extern char __wine_dos[0x40000000], __wine_shared_heap[0x03000000];
+//#else
+//__asm__(".zerofill WINE_DOS, WINE_DOS");
+//__asm__(".zerofill WINE_SHAREDHEAP, WINE_SHAREDHEAP");
+//static char __wine_dos[0x40000000] __attribute__((section("WINE_DOS, WINE_DOS")));
+//static char __wine_shared_heap[0x03000000] __attribute__((section("WINE_SHAREDHEAP, WINE_SHAREDHEAP")));
+//#endif
+//----
+
 #ifndef __clang__
-__asm__(".zerofill WINE_DOS, WINE_DOS, ___wine_dos, 0x40000000");
-__asm__(".zerofill WINE_SHAREDHEAP, WINE_SHAREDHEAP, ___wine_shared_heap, 0x03000000");
+__asm__(".zerofill WINE_DOS, WINE_DOS, ___wine_dos, 0x00001000");
+__asm__(".zerofill WINE_SHAREDHEAP, WINE_SHAREDHEAP, ___wine_shared_heap, 0x7f000000");
 extern char __wine_dos[0x40000000], __wine_shared_heap[0x03000000];
 #else
 __asm__(".zerofill WINE_DOS, WINE_DOS");
 __asm__(".zerofill WINE_SHAREDHEAP, WINE_SHAREDHEAP");
-static char __wine_dos[0x40000000] __attribute__((section("WINE_DOS, WINE_DOS")));
-static char __wine_shared_heap[0x03000000] __attribute__((section("WINE_SHAREDHEAP, WINE_SHAREDHEAP")));
+static char __wine_dos[0x00001000] __attribute__((section("WINE_DOS, WINE_DOS")));
+static char __wine_shared_heap[0x7f000000] __attribute__((section("WINE_SHAREDHEAP, WINE_SHAREDHEAP")));
 #endif
+//----
 
 static const struct wine_preload_info wine_main_preload_info[] =
 {

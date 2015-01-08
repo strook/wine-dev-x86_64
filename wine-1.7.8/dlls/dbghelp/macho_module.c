@@ -43,7 +43,28 @@
 #include <mach-o/fat.h>
 #include <mach-o/loader.h>
 #include <mach-o/nlist.h>
+//HACK
+#if SH_SYS == SH_SYS_APPLE
+#include <stdlib.h>
+#include <AvailabilityMacros.h>
+#include <mach/task.h>
+#include <mach-o/dyld_images.h>
+#include <mach-o/loader.h>
+#include <mach-o/nlist.h>
 
+/* Define things from 10.6 SDK for older SDKs */
+#ifndef MAC_OS_X_VERSION_10_6
+//----
+struct task_dyld_info
+{
+    mach_vm_address_t all_image_info_addr;
+    mach_vm_size_t all_image_info_size;
+};
+typedef struct task_dyld_info task_dyld_info_data_t;
+#define TASK_DYLD_INFO 17
+#define TASK_DYLD_INFO_COUNT (sizeof(task_dyld_info_data_t) / sizeof(natural_t))
+#endif // MAC_OS_X_VERSION_10_6
+#endif // SH_SYS_APPLE
 #ifdef HAVE_MACH_O_DYLD_IMAGES_H
 #include <mach-o/dyld_images.h>
 #else
@@ -60,7 +81,21 @@ struct dyld_all_image_infos {
     void*                         notification;
     int                           processDetachedFromSharedRegion;
 };
+
+/*
+ * This is the symbol table entry structure for 64-bit architectures.
+ */
+struct my_nlist_64 {
+    union {
+        uint32_t  n_strx; /* index into the string table */
+    } n_un;
+    uint8_t n_type;        /* type flag, see below */
+    uint8_t n_sect;        /* section number or NO_SECT */
+    uint16_t n_desc;       /* see <mach-o/stab.h> */
+    uint64_t n_value;      /* value of this symbol (or stab offset) */
+};
 #endif
+//-----
 
 #include "winternl.h"
 #include "wine/library.h"
@@ -997,10 +1032,24 @@ static BOOL macho_load_file(struct process* pcs, const WCHAR* filename,
                and we can find the dyld image infos address by looking up its symbol. */
             if (!dyld_all_image_infos_addr)
             {
+//HACK
                 struct nlist nl[2];
                 memset(nl, 0, sizeof(nl));
+                
+#if defined __APPLE__
+                task_dyld_info_data_t dyld_info;
+                mach_msg_type_number_t count = TASK_DYLD_INFO_COUNT;
+                task_info(mach_task_self(), TASK_DYLD_INFO, (task_info_t)&dyld_info, &count);
+                nl[0].n_un.n_strx = (struct dyld_all_image_infos *)dyld_info.all_image_info_addr;
+#else
                 nl[0].n_un.n_name = (char*)"_dyld_all_image_infos";
+#endif
+#if defined __APPLE__
+                if (!dlsym("/usr/lib/dyld", nl))
+#else
                 if (!nlist("/usr/lib/dyld", nl))
+#endif
+//---
                     dyld_all_image_infos_addr = (void*)nl[0].n_value;
             }
 

@@ -38,6 +38,14 @@ WINE_DEFAULT_DEBUG_CHANNEL(msvcrt);
 #define signbit(x) 0
 #endif
 
+//HACK
+#define finitef( x )   ( ( sizeof ( (x) ) == sizeof( float) ) ? \
+__isfinitef ( (float)(x) ) : __isfinited  ( (double)(x) ) )
+
+#define isnanf( x )      ( ( sizeof ( (x) ) == sizeof( float) ) ? \
+__isnanf ( (float)(x) ) : __isnand  ( (double)(x) ) )
+//----
+
 typedef int (CDECL *MSVCRT_matherr_func)(struct MSVCRT__exception *);
 
 static MSVCRT_matherr_func MSVCRT_default_matherr_func = NULL;

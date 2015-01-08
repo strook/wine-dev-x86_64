@@ -357,8 +357,10 @@ int write_process_memory( struct process *process, client_ptr_t ptr, data_size_t
     }
     region_address = aligned_address;
     info_size = sizeof(info);
-    ret = vm_region( process_port, &region_address, &region_size, VM_REGION_BASIC_INFO,
+//HACK
+    ret = mach_vm_region( process_port, &region_address, &region_size, VM_REGION_BASIC_INFO,
                      (vm_region_info_t)&info, &info_size, &dummy );
+//---
     if (ret != KERN_SUCCESS)
     {
         mach_set_error( ret );

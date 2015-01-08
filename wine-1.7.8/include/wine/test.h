@@ -84,7 +84,9 @@ static inline int winetest_strcmpW( const WCHAR *str1, const WCHAR *str2 )
 #define START_TEST(name) void func_##name(void)
 #endif
 
-#if defined(__x86_64__) && defined(__GNUC__) && defined(__WINE_USE_MSVCRT)
+//HACK
+#if defined(__x86_64__) && defined(__GNUC__) && defined(__WINE_USE_MSVCRT) && !defined(__APPLE__)
+//---
 #define __winetest_cdecl __cdecl
 #define __winetest_va_list __builtin_ms_va_list
 #else
@@ -179,7 +181,9 @@ extern void __winetest_cdecl winetest_trace( const char *msg, ... );
 #include <stdio.h>
 #include <excpt.h>
 
-#if defined(__x86_64__) && defined(__GNUC__) && defined(__WINE_USE_MSVCRT)
+//HACK
+#if defined(__x86_64__) && defined(__GNUC__) && defined(__WINE_USE_MSVCRT)&& !defined(__APPLE__)
+//----
 # define __winetest_va_start(list,arg) __builtin_ms_va_start(list,arg)
 # define __winetest_va_end(list) __builtin_ms_va_end(list)
 #else

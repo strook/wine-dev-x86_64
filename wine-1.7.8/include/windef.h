@@ -85,7 +85,9 @@ extern "C" {
 #endif /* __cdecl */
 
 #ifndef __ms_va_list
-# if defined(__x86_64__) && defined (__GNUC__)
+//HACK
+# if defined(__x86_64__) && defined (__GNUC__) && !defined(__APPLE__)
+//---
 #  define __ms_va_list __builtin_ms_va_list
 #  define __ms_va_start(list,arg) __builtin_ms_va_start(list,arg)
 #  define __ms_va_end(list) __builtin_ms_va_end(list)
