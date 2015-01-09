@@ -3434,3 +3434,11 @@ typedef struct _FPO_DATA
     __ENDTRY
     return ret;
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

@@ -905,3 +905,11 @@ HCURSOR WINAPI OleIconToCursor( HINSTANCE hinstExe, HICON hIcon)
     /* FIXME: make an extended conversation from HICON to HCURSOR */
     return CopyCursor(hIcon);
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

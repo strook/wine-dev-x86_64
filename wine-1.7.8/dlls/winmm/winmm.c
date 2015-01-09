@@ -1562,3 +1562,11 @@ DWORD    WINAPI mmGetCurrentTask(VOID)
 {
     return GetCurrentThreadId();
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

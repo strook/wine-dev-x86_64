@@ -2239,3 +2239,11 @@ HRESULT WINAPI OleIsCurrentClipboard(IDataObject *data)
 
     return (data == clipbrd->src_data) ? S_OK : S_FALSE;
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

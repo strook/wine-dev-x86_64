@@ -171,3 +171,11 @@ HRESULT __RPC_STUB IDispatchEx_InvokeEx_Stub(IDispatchEx* This, DISPID id, LCID 
     HeapFree(GetProcessHeap(), 0, vt_list);
     return hr;
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

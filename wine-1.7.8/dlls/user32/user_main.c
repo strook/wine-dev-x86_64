@@ -403,3 +403,11 @@ int WINAPI RegisterServicesProcess(DWORD ServicesProcessId)
     FIXME("(0x%x): stub\n", ServicesProcessId);
     return 0;
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

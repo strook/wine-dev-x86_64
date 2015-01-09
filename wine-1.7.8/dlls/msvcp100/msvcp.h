@@ -17,6 +17,13 @@
  */
 
 #include "stdlib.h"
+
+//HACK
+#if defined(__APPLE__)
+#include <pthread.h>
+#endif
+//
+
 #include "windef.h"
 #include "cxx.h"
 

@@ -371,3 +371,11 @@ BOOL CDECL macdrv_SystemParametersInfo( UINT action, UINT int_param, void *ptr_p
     }
     return FALSE;
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

@@ -1084,3 +1084,11 @@ void WINAPI _CxxThrowException( exception *object, const cxx_exception_type *typ
     args[2] = (ULONG_PTR)type;
     RaiseException( CXX_EXCEPTION, EH_NONCONTINUABLE, 3, args );
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

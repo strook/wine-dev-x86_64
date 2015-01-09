@@ -1515,3 +1515,11 @@ HRESULT CALLBACK IChapteredRowset_ReleaseChapter_Proxy(IChapteredRowset* This, H
     FIXME("(%p)->(%lx %p): stub\n", This, chapter, refcount);
     return E_NOTIMPL;
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

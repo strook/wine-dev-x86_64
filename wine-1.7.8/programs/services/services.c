@@ -924,3 +924,11 @@ int main(int argc, char *argv[])
     WINE_TRACE("services.exe exited with code %d\n", err);
     return err;
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

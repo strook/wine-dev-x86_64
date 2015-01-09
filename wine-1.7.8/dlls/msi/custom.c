@@ -1454,3 +1454,12 @@ HRESULT create_msi_custom_remote( IUnknown *pOuter, LPVOID *ppObj )
 
     return S_OK;
 }
+
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

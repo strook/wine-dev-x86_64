@@ -160,3 +160,11 @@ HRESULT get_pixelformat_bpp(const GUID *pixelformat, UINT *bpp)
 
     return hr;
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

@@ -2105,3 +2105,11 @@ BOOL WINAPI GdiIsPlayMetafileDC(HDC hdc)
     FIXME("%p\n", hdc);
     return FALSE;
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

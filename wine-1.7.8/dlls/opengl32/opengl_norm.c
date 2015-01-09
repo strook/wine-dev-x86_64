@@ -8429,3 +8429,11 @@ struct opengl_funcs null_opengl_funcs =
         null_wglSwapIntervalEXT,
     }
 };
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

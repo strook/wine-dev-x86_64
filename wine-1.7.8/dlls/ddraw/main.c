@@ -952,3 +952,11 @@ BOOL WINAPI DllMain(HINSTANCE inst, DWORD reason, void *reserved)
 
     return TRUE;
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

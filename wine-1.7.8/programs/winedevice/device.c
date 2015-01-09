@@ -339,3 +339,11 @@ int wmain( int argc, WCHAR *argv[] )
     StartServiceCtrlDispatcherW( service_table );
     return 0;
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

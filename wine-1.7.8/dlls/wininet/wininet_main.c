@@ -40,3 +40,11 @@ HRESULT WINAPI DllInstall(BOOL bInstall, LPCWSTR cmdline)
 
   return S_OK;
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

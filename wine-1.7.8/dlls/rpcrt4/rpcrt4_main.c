@@ -1069,3 +1069,11 @@ RPC_STATUS RPC_ENTRY RpcCancelThreadEx(void* ThreadHandle, LONG Timeout)
     else
         return rpc_cancel_thread(target_tid);
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

@@ -2333,21 +2333,17 @@ static FORCEINLINE struct _TEB * WINAPI NtCurrentTeb(void)
     __asm__(".byte 0x65\n\tmovq (0x30),%0" : "=r" (teb));
     return teb;
 }
-#elif defined(__APPLE__)
 //HACK
-#include <pthread.h>
-    
-static pthread_key_t teb_key;
+#elif defined(__APPLE__)
+static unsigned long teb_key;
 
-static FORCEINLINE struct _TEB * WINAPI NtCurrentTeb(void)
-{
-    return pthread_getspecific( teb_key );
-}
+extern struct _TEB * WINAPI NtCurrentTeb(void);
 //---
 #else
 extern struct _TEB * WINAPI NtCurrentTeb(void);
 #endif
-
+    
+    
 #ifdef NONAMELESSUNION
 #define GetCurrentFiber()  (((NT_TIB *)NtCurrentTeb())->u.FiberData)
 #else

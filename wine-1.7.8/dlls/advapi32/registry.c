@@ -2944,3 +2944,11 @@ LONG WINAPI RegDisableReflectionKey(HKEY base)
     FIXME("%p: stub\n", base);
     return ERROR_SUCCESS;
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

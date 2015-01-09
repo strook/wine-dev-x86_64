@@ -5,7 +5,7 @@ IMPORTANT HOW TO BUILD:
 2. install Xquarz
 3. configure args: 
 
-configure --enable-win64 --disable-option-checking --without-oss --without-cms --without-v4l --without-alsa --without-audioio --without-capi --with-coreaudio --without-esd --without-hal --without-jack --with-xcomposite --with-xcursor --with-xinerama --with-xinput --with-xml --with-xrandr --with-xrender --with-xshape --with-xshm --with-xslt --with-xxf86vm --with-x --without-fontconfig --without-gphoto --without-gstreamer --without-dbus --disable-win16 --verbose --disable-wineqtdecoder --x-includes=/usr/X11/include --x-libraries=/usr/X11/lib
+configure --enable-win64 --disable-option-checking --without-oss --without-cms --without-v4l --without-alsa --without-audioio --without-capi --with-coreaudio --without-esd --without-hal --without-jack --with-xcomposite --with-xcursor --with-xinerama --with-xinput --with-xml --with-xrandr --with-xrender --with-xshape --with-xshm --with-xslt --with-xxf86vm --with-x --without-fontconfig --without-gphoto --without-gstreamer --without-dbus --disable-win16 --verbose --disable-wineqtdecoder
 
 4.make & make install
 

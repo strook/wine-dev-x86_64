@@ -38,6 +38,10 @@
 
 #include "wine/debug.h"
 
+#include "winnt.h"
+
+
+
 WINE_DEFAULT_DEBUG_CHANNEL(actxprxy);
 
 HRESULT CALLBACK IServiceProvider_QueryService_Proxy(
@@ -210,4 +214,12 @@ HRESULT __RPC_STUB IModalWindow_Show_Stub(
 {
     TRACE("(%p)->(%p)\n", This, hwndOwner);
     return IModalWindow_Show(This, hwndOwner);
+}
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
 }

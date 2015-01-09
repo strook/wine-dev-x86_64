@@ -735,3 +735,11 @@ BOOL CDECL X11DRV_SystemParametersInfo( UINT action, UINT int_param, void *ptr_p
     }
     return FALSE;  /* let user32 handle it */
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

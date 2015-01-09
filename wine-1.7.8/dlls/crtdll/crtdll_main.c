@@ -25,6 +25,12 @@
 # include <sys/stat.h>
 #endif
 
+//HACK
+#if defined(__APPLE__)
+#include <pthread.h>;
+#endif
+//---
+
 #include "windef.h"
 #include "winbase.h"
 

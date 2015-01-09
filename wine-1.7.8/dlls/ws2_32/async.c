@@ -469,3 +469,11 @@ WSAEVENT WINAPI WPUCompleteOverlappedRequest(SOCKET s, LPWSAOVERLAPPED overlappe
 
     return NULL;
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

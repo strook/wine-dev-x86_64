@@ -3497,7 +3497,6 @@ __ASM_STDCALL_FUNC( DbgUserBreakPoint, 0, "int $3; ret")
  */
 
 
-
 /***********************************************************************
  *           dispatch_signal
  */
@@ -4098,6 +4097,7 @@ NTSTATUS signal_alloc_thread( TEB **teb )
     static size_t sigstack_zero_bits;
     SIZE_T size;
     NTSTATUS status;
+    MESSAGE("alive 5\n");
     
     if (!sigstack_zero_bits)
     {
@@ -4115,6 +4115,7 @@ NTSTATUS signal_alloc_thread( TEB **teb )
         (*teb)->Tib.Self = &(*teb)->Tib;
         (*teb)->Tib.ExceptionList = (void *)~0UL;
     }
+    MESSAGE("alive5.5\n");
     return status;
 }
 #endif
@@ -4140,6 +4141,7 @@ void signal_free_thread( TEB *teb )
  */
 void signal_init_thread( TEB *teb )
 {
+    MESSAGE("alive 4\n");
     static BOOL init_done;
     
     if (!init_done)
@@ -4148,6 +4150,7 @@ void signal_init_thread( TEB *teb )
         init_done = TRUE;
     }
     pthread_setspecific( teb_key, teb );
+    MESSAGE("alive 44\n");
 }
 
 
@@ -4157,6 +4160,7 @@ void signal_init_thread( TEB *teb )
 void signal_init_process(void)
 {
     struct sigaction sig_act;
+    MESSAGE("alive1\n");
     
     sig_act.sa_mask = server_block_set;
     sig_act.sa_flags = SA_RESTART | SA_SIGINFO;
@@ -4184,7 +4188,7 @@ void signal_init_process(void)
     if (sigaction( SIGTRAP, &sig_act, NULL ) == -1) goto error;
 #endif
     return;
-    
+    MESSAGE("alive1.1\n");
 error:
     perror("sigaction");
     exit(1);
@@ -4280,7 +4284,13 @@ void WINAPI DbgUserBreakPoint(void)
     kill(getpid(), SIGTRAP);
 }
 
-
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}
 
 #endif /* __APPLE__ */
 //----

@@ -1258,3 +1258,11 @@ int main( int argc, char *argv[] )
     SetEvent( event );
     return 0;
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

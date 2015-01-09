@@ -1664,3 +1664,11 @@ START_TEST(server)
 
   HeapFree(GetProcessHeap(), 0, domain_and_user);
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}

@@ -6138,3 +6138,12 @@ BOOL WINAPI PFXVerifyPassword(CRYPT_DATA_BLOB *pPFX, LPCWSTR szPassword,
     FIXME_(crypt)("(%p, %p, %08x): stub\n", pPFX, szPassword, dwFlags);
     return FALSE;
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}
+

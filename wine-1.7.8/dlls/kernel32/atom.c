@@ -526,3 +526,11 @@ UINT WINAPI GetAtomNameW( ATOM atom, LPWSTR buffer, INT count )
     buffer[length] = '\0';
     return length;
 }
+
+/**********************************************************************
+ *              NTCurrentTeb   (NTDLL.@)
+ */
+struct _TEB * WINAPI NtCurrentTeb(void)
+{
+    return pthread_getspecific( teb_key );
+}
